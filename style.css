@@ -295,7 +295,6 @@ p {
     max-width: 500px;
     margin: 0 auto;
     overflow: hidden;
-    /* Soft glowing border specifically for the iframe area */
     border: 4px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 15px 35px rgba(255, 140, 180, 0.4);
     height: 700px;
@@ -307,7 +306,6 @@ p {
     height: 100%;
     border: none;
     display: block;
-    /* Allows the iframe's background to be transparent if the source permits */
     background-color: transparent;
 }
 

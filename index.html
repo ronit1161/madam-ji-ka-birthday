@@ -1,166 +1,688 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Happy Birthday, Sweetheart ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <!-- Fonts: Dancing Script for cute headers, Poppins for clean modern text -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins..." as="style">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins..." rel="stylesheet">
+  :root {
+    --midnight: #080613;
+    --deep: #0f0c20;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --rose: #e8b4b8;
+    --rose-deep: #c87080;
+    --cream: #f5ede0;
+    --white: #ffffff;
+    --muted: rgba(255,255,255,0.45);
+  }
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--midnight);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--cream);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+    user-select: none;
+  }
 
-    <link rel="stylesheet" href="style.css">
+  /* ── STAGE ── */
+  #stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: stretch;
+    width: 100%; height: 100%;
+    will-change: transform;
+    transition: transform 0.55s cubic-bezier(0.77,0,0.175,1);
+  }
+
+  /* ── SECTION ── */
+  .scene {
+    flex: 0 0 100vw;
+    width: 100vw; height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem 1.5rem;
+  }
+
+  /* ─── STARS CANVAS ─── */
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+
+  /* ─── PROGRESS DOTS ─── */
+  #dots {
+    position: fixed; bottom: 1.6rem; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 7px; z-index: 100;
+  }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transition: all 0.4s ease;
+  }
+  .dot.active { background: var(--gold); transform: scale(1.4); }
+
+  /* ─── NEXT FLOAT ─── */
+  #next-btn {
+    position: fixed; bottom: 3.2rem; right: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem; letter-spacing: 0.08em;
+    color: var(--gold-light);
+    opacity: 0.75;
+    cursor: pointer; z-index: 100;
+    padding: 0.5rem 0.75rem;
+    border: 0.5px solid rgba(201,168,76,0.35);
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    background: rgba(8,6,19,0.4);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  #next-btn:active { transform: scale(0.93); opacity: 1; }
+  #next-btn.hidden { opacity: 0; pointer-events: none; }
+
+  /* ─── PREV FLOAT ─── */
+  #prev-btn {
+    position: fixed; bottom: 3.2rem; left: 1.5rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+    opacity: 0.6;
+    cursor: pointer; z-index: 100;
+    padding: 0.5rem 0.75rem;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    background: rgba(8,6,19,0.3);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  #prev-btn:active { transform: scale(0.93); }
+  #prev-btn.hidden { opacity: 0; pointer-events: none; }
+
+  /* ─── SCENE 0 — LANDING ─── */
+  #scene-0 { cursor: pointer; }
+  .landing-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, #1a0e2e 0%, #080613 70%);
+  }
+  .landing-center { position: relative; z-index: 2; text-align: center; }
+  .landing-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 2.5rem; opacity: 0.8;
+  }
+  .landing-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.4rem, 10vw, 3.2rem);
+    color: var(--cream); line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+  .landing-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-style: italic;
+    color: var(--muted); letter-spacing: 0.05em;
+    margin-bottom: 3rem;
+  }
+  .tap-hint {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold-light); opacity: 0.7;
+    animation: pulse-hint 2.2s ease-in-out infinite;
+  }
+  .tap-ring {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    animation: ring-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse-hint { 0%,100%{opacity:0.5} 50%{opacity:1} }
+  @keyframes ring-pulse { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.15);opacity:1} }
+
+  .gold-line {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 2rem;
+  }
+
+  /* floating petals on landing */
+  .petal {
+    position: absolute; pointer-events: none;
+    font-size: 1rem; opacity: 0;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-10%) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ─── SCENE 1 — HERO ─── */
+  #scene-1 {
+    background: linear-gradient(160deg, #100820 0%, #0d0618 50%, #150a22 100%);
+  }
+  .hero-img-wrap {
+    width: 130px; height: 130px; border-radius: 50%;
+    overflow: hidden; margin-bottom: 1.5rem;
+    border: 2px solid rgba(201,168,76,0.4);
+    box-shadow: 0 0 40px rgba(201,168,76,0.15);
+    position: relative; z-index: 1;
+  }
+  .hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .hero-name {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+    color: var(--cream); text-align: center;
+    line-height: 1.2; margin-bottom: 0.6rem; position: relative; z-index: 1;
+  }
+  .hero-tagline {
+    font-size: 1rem; font-style: italic; color: var(--muted);
+    text-align: center; margin-bottom: 1.5rem; position: relative; z-index: 1;
+  }
+  .bear-row {
+    display: flex; gap: 0.5rem; justify-content: center;
+    position: relative; z-index: 1;
+  }
+  .bear-row img {
+    width: 52px; height: 52px; border-radius: 50%; object-fit: cover;
+    border: 1.5px solid rgba(201,168,76,0.3);
+  }
+  .scene-num {
+    position: absolute; top: 1.8rem; right: 1.5rem;
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    color: rgba(201,168,76,0.4); text-transform: uppercase;
+  }
+
+  /* ─── SCENE 2-7 — MEMORIES ─── */
+  .memory-scene {
+    background: linear-gradient(145deg, #0e0a1e 0%, #0a0715 100%);
+  }
+  .mem-tag {
+    font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.6rem; opacity: 0.8;
+  }
+  .mem-photo {
+    width: 100%; max-width: 320px;
+    aspect-ratio: 4/3; border-radius: 12px;
+    overflow: hidden; margin-bottom: 1.25rem;
+    border: 1px solid rgba(201,168,76,0.2);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+  .mem-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .mem-emoji { font-size: 2.2rem; margin-bottom: 0.7rem; display: block; text-align: center; }
+  .mem-caption {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.3rem, 5.5vw, 1.7rem);
+    color: var(--cream); text-align: center; line-height: 1.35;
+    margin-bottom: 0.5rem;
+  }
+  .mem-sub {
+    font-size: 0.9rem; color: var(--muted); text-align: center;
+    font-style: italic;
+  }
+  .mem-counter {
+    position: absolute; top: 1.8rem; left: 1.5rem;
+    font-size: 0.7rem; letter-spacing: 0.18em; color: var(--gold); opacity: 0.55;
+  }
+
+  /* decorative corner */
+  .corner-deco {
+    position: absolute; bottom: 5.5rem; right: 1.5rem;
+    font-size: 1.4rem; opacity: 0.12;
+  }
+
+  /* ─── SCENE 8 — LETTER ─── */
+  #scene-8 {
+    background: linear-gradient(170deg, #0e0820 0%, #100a1a 100%);
+    align-items: flex-start; justify-content: flex-start;
+    padding: 2.5rem 1.75rem 5rem;
+    overflow: hidden;
+  }
+  .letter-inner {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center; overflow: hidden;
+  }
+  .letter-label {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem; opacity: 0.7;
+  }
+  .letter-to {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    color: var(--rose); margin-bottom: 1.2rem; line-height: 1.3;
+  }
+  .letter-body {
+    font-size: clamp(0.95rem, 3.8vw, 1.1rem);
+    line-height: 1.85; color: rgba(245,237,224,0.8);
+    font-style: italic; font-weight: 300;
+  }
+  .letter-sign {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.4rem; color: var(--gold-light);
+    margin-top: 1.5rem;
+  }
+  .letter-divider {
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin: 1.1rem 0;
+  }
+
+  /* ─── SCENE 9 — BOUQUET ─── */
+  #scene-9 {
+    background: radial-gradient(ellipse at 50% 40%, #1a0e2e 0%, #080613 65%);
+  }
+  .bouquet-wrap { position: relative; z-index: 1; text-align: center; }
+  .bouquet-flowers { font-size: 3.5rem; margin-bottom: 1rem; display: block; line-height: 1; }
+  .bouquet-title {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    color: var(--cream); margin-bottom: 0.75rem;
+  }
+  .bouquet-poem {
+    font-size: 1rem; line-height: 1.9; color: var(--muted);
+    font-style: italic; max-width: 280px; margin: 0 auto 1.5rem;
+  }
+  .bouquet-hearts { font-size: 1.3rem; letter-spacing: 0.4em; opacity: 0.6; }
+
+  /* ─── SCENE 10 — FINALE ─── */
+  #scene-10 {
+    background: radial-gradient(ellipse at 50% 50%, #1e0d30 0%, #080613 70%);
+    cursor: default;
+  }
+  .finale-wrap { text-align: center; position: relative; z-index: 2; }
+  .finale-big {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 12vw, 4rem);
+    color: var(--gold-light); line-height: 1.15; margin-bottom: 0.5rem;
+  }
+  .finale-sub {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem;
+  }
+  .confetti-burst { font-size: 2rem; margin-bottom: 1rem; display: block; animation: burst 1.5s ease-out; }
+  @keyframes burst { 0%{transform:scale(0) rotate(-20deg);opacity:0} 60%{transform:scale(1.2) rotate(5deg);opacity:1} 100%{transform:scale(1) rotate(0);opacity:1} }
+  .finale-made {
+    font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.2); position: absolute; bottom: 5rem; left: 50%; transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  /* ─── GLOBAL ANIM ─── */
+  .scene-enter { animation: sceneIn 0.65s ease forwards; }
+  @keyframes sceneIn { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
+
+  /* gold shimmer text */
+  .shimmer {
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 40%, var(--gold) 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+
+  /* floating heart decoration */
+  .float-heart {
+    display: inline-block;
+    animation: float-up 3s ease-in-out infinite;
+  }
+  @keyframes float-up { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  /* Glow ring for hero portrait */
+  @keyframes glow-ring { 0%,100%{box-shadow:0 0 20px rgba(201,168,76,0.1),0 0 60px rgba(201,168,76,0.05)} 50%{box-shadow:0 0 30px rgba(201,168,76,0.25),0 0 80px rgba(201,168,76,0.12)} }
+  .hero-img-wrap { animation: glow-ring 3.5s ease-in-out infinite; }
+
+  /* swipe hint on landing */
+  .swipe-hint {
+    position: absolute; bottom: 5.5rem; left: 50%; transform: translateX(-50%);
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    animation: fade-swipe 2.5s ease-in-out 3s infinite;
+    opacity: 0;
+  }
+  @keyframes fade-swipe { 0%,100%{opacity:0} 40%,60%{opacity:1} }
+</style>
 </head>
-
 <body>
 
-    <!-- Canvas for Confetti -->
-    <canvas id="confettiCanvas"></canvas>
+<canvas id="stars"></canvas>
 
-    <!-- Floating Background Shapes -->
-    <div class="floating-shapes">
-        <div class="shape heart-shape"><i class="fas fa-heart"></i></div>
-        <div class="shape sparkle-shape"><i class="fas fa-sparkles"></i></div>
-        <div class="shape sparkle-shape"><i class="fas fa-sparkles"></i></div>
-        <div class="shape heart-shape"><i class="fas fa-heart"></i></div>
-        <div class="shape heart-shape"><i class="fas fa-heart"></i></div>
+<!-- PROGRESS DOTS -->
+<div id="dots"></div>
+
+<!-- NAV BUTTONS -->
+<div id="prev-btn" class="hidden">← Back</div>
+<div id="next-btn">Next ❤</div>
+
+<!-- ════════════════════════════════════════════════════
+     STAGE — all scenes side by side horizontally
+════════════════════════════════════════════════════ -->
+<div id="stage">
+
+  <!-- 0 · LANDING -->
+  <div class="scene" id="scene-0">
+    <div class="landing-bg"></div>
+
+    <!-- petals injected by JS -->
+
+    <div class="landing-center">
+      <div class="landing-date">A Very Special Day</div>
+      <div class="gold-line"></div>
+      <div class="landing-title">Happy Birthday<br>Sweetheart</div>
+      <div class="landing-sub">A little story, made just for you</div>
+      <div class="tap-hint">
+        <div class="tap-ring">❤</div>
+        Tap anywhere to begin
+      </div>
     </div>
 
-    <!-- Background Enhancement GIFs -->
-    <div class="background-gifs">
-        <img src="./GIF/frame_22_delay-0.1s.jpg" alt="Cute Bear 1" class="bg-gif gif-1">
-        <img src="./GIF/frame_54_delay-0.1s.jpg" alt="Cute Bear 2" class="bg-gif gif-2">
-        <img src="./GIF/frame_59_delay-0.1s.jpg" alt="Cute Bear 3" class="bg-gif gif-3">
-        <img src="./GIF/frame_59_delay-0.1s.jpg" alt="Cute Bear 4" class="bg-gif gif-4">
+    <div class="swipe-hint">or swipe left to start</div>
+  </div>
+
+  <!-- 1 · HERO -->
+  <div class="scene" id="scene-1">
+    <span class="scene-num">01 / 10</span>
+    <div class="hero-img-wrap">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/img8.jpg" alt="You" onerror="this.style.background='linear-gradient(135deg,#2a1040,#1a0828)';this.style.display='block'">
     </div>
+    <h1 class="hero-name">Happy Birthday,<br>Sweetheart ❤️</h1>
+    <p class="hero-tagline">Every moment with you is magic…</p>
+    <div class="gold-line" style="margin-bottom:1.2rem"></div>
+    <div class="bear-row">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/GIF/frame_22_delay-0.1s.jpg" alt="">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/GIF/frame_54_delay-0.1s.jpg" alt="">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/GIF/frame_59_delay-0.1s.jpg" alt="">
+    </div>
+  </div>
 
-    <!-- Background Music & Toggle -->
-    <audio id="bgMusic" loop>
-        <source src="./Music/Blue-Yung-Kai.mp3" type="audio/mpeg">
-    </audio>
-    <button id="musicToggle" class="music-toggle glass-panel" title="Play/Pause Music">
-        <i class="fas fa-music"></i>
-    </button>
+  <!-- 2 · MEMORY 1 -->
+  <div class="scene memory-scene" id="scene-2">
+    <span class="mem-counter">Memory 01</span>
+    <span class="scene-num">02 / 10</span>
+    <div class="mem-tag">A Million Beautiful Memories</div>
+    <div class="mem-photo">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg" alt="That first trip" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
+    </div>
+    <span class="mem-emoji">🌅</span>
+    <h2 class="mem-caption">That first trip</h2>
+    <p class="mem-sub">where everything felt new & golden</p>
+    <div class="corner-deco">✦</div>
+  </div>
 
-    <!-- HERO SECTION -->
-    <header class="hero" id="home">
-        <div class="hero-content">
-            <div class="bear-container floating-bear">
-                <img src="./Images/img8.jpg" width="300" height="300" fetchpriority="high" />
-            </div>
-            <h1 class="fade-in-up delay-1">Happy Birthday, Sweetheart ❤️</h1>
-            <p class="fade-in-up delay-2 typing-effect">Every moment with you is magic...</p>
-            <button id="startBtn" class="cta-button fade-in-up delay-3 glass-panel">
-                Start the Celebration 🎉
-            </button>
-        </div>
-        <div class="scroll-indicator fade-in-up delay-4">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </header>
+  <!-- 3 · MEMORY 2 -->
+  <div class="scene memory-scene" id="scene-3">
+    <span class="mem-counter">Memory 02</span>
+    <span class="scene-num">03 / 10</span>
+    <div class="mem-tag">A Million Beautiful Memories</div>
+    <div class="mem-photo">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg" alt="Your gorgeous smile" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
+    </div>
+    <span class="mem-emoji">💕</span>
+    <h2 class="mem-caption">Your gorgeous smile</h2>
+    <p class="mem-sub">the one that stopped me in my tracks</p>
+    <div class="corner-deco">✦</div>
+  </div>
 
-    <!-- GALLERY SECTION -->
-    <section class="gallery" id="gallery">
-        <div class="container reveal">
-            <h2 class="section-title">A Million Beautiful Memories ✨</h2>
-            <div class="gallery-grid">
-                <!-- Image Cards -->
+  <!-- 4 · MEMORY 3 -->
+  <div class="scene memory-scene" id="scene-4">
+    <span class="mem-counter">Memory 03</span>
+    <span class="scene-num">04 / 10</span>
+    <div class="mem-tag">A Million Beautiful Memories</div>
+    <div class="mem-photo">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg" alt="Cozy winters" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
+    </div>
+    <span class="mem-emoji">☕</span>
+    <h2 class="mem-caption">Cozy winters</h2>
+    <p class="mem-sub">warm cups, warm hearts</p>
+    <div class="corner-deco">✦</div>
+  </div>
 
-                <div class="gallery-card glass-panel">
-                    <img src="./Images/pexels-teodorapopa-30674062.jpg" alt="Memory 1">
-                    <div class="card-overlay"><span>That first trip 🌅</span></div>
-                </div>
-                <div class="gallery-card glass-panel">
-                    <img src="./Images/pexels-teodorapopa-30674062.jpg" alt="Memory 2">
-                    <div class="card-overlay"><span>Your gorgeous smile 💕</span></div>
-                </div>
-                <div class="gallery-card glass-panel">
-                    <img src="./Images/pexels-teodorapopa-30674062.jpg" alt="Memory 3">
-                    <div class="card-overlay"><span>Cozy winters ☕</span></div>
-                </div>
-                <div class="gallery-card glass-panel">
-                    <img src="./Images/pexels-teodorapopa-30674062.jpg" alt="Memory 4">
-                    <div class="card-overlay"><span>Holding hands forever 🤝</span></div>
-                </div>
-                <div class="gallery-card glass-panel">
-                    <img src="./Images/pexels-teodorapopa-30674062.jpg" alt="Memory 5">
-                    <div class="card-overlay"><span>Late night rides 🌃</span></div>
-                </div>
-                <div class="gallery-card glass-panel">
-                    <img src="./Images/pexels-teodorapopa-30674062.jpg" alt="Memory 6">
-                    <div class="card-overlay"><span>Our best adventure 🎈</span></div>
-                </div>
-            </div>
-        </div>
-        </div>
+  <!-- 5 · MEMORY 4 -->
+  <div class="scene memory-scene" id="scene-5">
+    <span class="mem-counter">Memory 04</span>
+    <span class="scene-num">05 / 10</span>
+    <div class="mem-tag">A Million Beautiful Memories</div>
+    <div class="mem-photo">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg" alt="Holding hands" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
+    </div>
+    <span class="mem-emoji">🤝</span>
+    <h2 class="mem-caption">Holding hands forever</h2>
+    <p class="mem-sub">the safest place I know</p>
+    <div class="corner-deco">✦</div>
+  </div>
 
-        <div style="text-align: center; margin-top: 40px;">
-            <button id="toBouquetBtn" class="cta-button glass-panel reveal">
-                See Something Special 🌸 <i class="fas fa-arrow-down" style="margin-left: 8px; font-size: 0.9em;"></i>
-            </button>
-        </div>
-        </div>
-    </section>
+  <!-- 6 · MEMORY 5 -->
+  <div class="scene memory-scene" id="scene-6">
+    <span class="mem-counter">Memory 05</span>
+    <span class="scene-num">06 / 10</span>
+    <div class="mem-tag">A Million Beautiful Memories</div>
+    <div class="mem-photo">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg" alt="Late night rides" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
+    </div>
+    <span class="mem-emoji">🌃</span>
+    <h2 class="mem-caption">Late night rides</h2>
+    <p class="mem-sub">city lights & your laughter</p>
+    <div class="corner-deco">✦</div>
+  </div>
 
-    <!-- BOUQUET SECTION -->
-    <section class="bouquet-section reveal" id="bouquet">
-        <div class="container">
-            <h2 class="section-title">A Digital Bouquet Just For You 💐</h2>
-            <div class="bouquet-container glass-panel scale-bounce-slow">
-                <iframe src="https://digibouquet.vercel.app/bouquet/6a4440ef-b07d-4b3e-8955-f82f574a0d7e"
-                    title="Digital Bouquet" allowfullscreen></iframe>
-            </div>
-            <!-- <p style="text-align: center; margin-top: 15px; margin-bottom: 20px; font-size: 0.9rem; opacity: 0.8;">
-                (Interact with the flowers above!)
-            </p> -->
+  <!-- 7 · MEMORY 6 -->
+  <div class="scene memory-scene" id="scene-7">
+    <span class="mem-counter">Memory 06</span>
+    <span class="scene-num">07 / 10</span>
+    <div class="mem-tag">A Million Beautiful Memories</div>
+    <div class="mem-photo">
+      <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg" alt="Our best adventure" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
+    </div>
+    <span class="mem-emoji">🎈</span>
+    <h2 class="mem-caption">Our best adventure</h2>
+    <p class="mem-sub">every day is one with you</p>
+    <div class="corner-deco">✦</div>
+  </div>
 
-            <div style="text-align: center; margin-top: 20rem;">
-                <button id="toMessageBtn" class="cta-button glass-panel reveal">
-                    Read My Heart 💌 <i class="fas fa-arrow-down" style="margin-left: 8px; font-size: 0.9em;"></i>
-                </button>
-            </div>
-        </div>
-    </section>
+  <!-- 8 · LETTER -->
+  <div class="scene" id="scene-8">
+    <span class="scene-num">08 / 10</span>
+    <div class="letter-inner">
+      <div class="letter-label">💌 &nbsp; From the heart</div>
+      <div class="letter-to">To the most annoying person in my life…</div>
+      <div class="letter-divider"></div>
+      <p class="letter-body">
+        From the moment you entered my world, everything just became brighter, softer, and more beautiful.
+        <br><br>
+        You are my absolute favourite person, my safest place, and my greatest adventure. I love your smile, your laugh, and the way you make every single day feel just a little bit like magic.
+        <br><br>
+        I hope this year brings you as much happiness as you bring to me every single second.
+      </p>
+      <div class="letter-sign">Yours forever &amp; always ❤</div>
+    </div>
+  </div>
 
-    <!-- SPECIAL MESSAGE SECTION -->
-    <section class="message-section reveal" id="message">
-        <div class="container">
-            <div class="glass-card big-glass-card">
-                <!-- Magical decorative bear/icons -->
-                <div class="message-decoration scale-bounce">
-                    <i class="fas fa-envelope-open-heart"></i>
-                </div>
-                <h2 class="message-title">To the most annoying person my life...</h2>
-                <div class="message-body">
-                    <p>
-                        From the moment you entered my world, everything just became brighter, softer, and more
-                        beautiful.
-                    </p>
-                    <p>
-                        You are my absolute favorite person, my safest place, and my greatest adventure. I love your
-                        smile, your laugh, and the way you make every single day feel just a little bit like magic.
-                    </p>
-                    <p>
-                        I hope this year brings you as much happiness as you bring to me every single second. Happy
-                        Birthday, darling. Here’s to a lifelong journey of making memories together.
-                    </p>
-                    <p class="signature">Yours forever & always ❤️</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- 9 · BOUQUET -->
+  <div class="scene" id="scene-9">
+    <span class="scene-num">09 / 10</span>
+    <div class="bouquet-wrap">
+      <span class="bouquet-flowers">🌸🌷🌹🌻🌼</span>
+      <div class="gold-line" style="margin-bottom:1.2rem"></div>
+      <h2 class="bouquet-title">A Digital Bouquet<br>Just For You</h2>
+      <p class="bouquet-poem">
+        Every flower for a reason,<br>
+        every petal whispers your name.<br>
+        You make every ordinary moment<br>
+        feel extraordinary.
+      </p>
+      <div class="bouquet-hearts">❤ &nbsp; ❤ &nbsp; ❤</div>
+    </div>
+  </div>
 
-    <footer class="footer">
-        <p>Made with all the love in the world for you.</p>
-    </footer>
+  <!-- 10 · FINALE -->
+  <div class="scene" id="scene-10">
+    <div class="finale-wrap">
+      <span class="confetti-burst">🎉</span>
+      <div class="finale-big shimmer">Happy Birthday!</div>
+      <p class="finale-sub">Here's to a lifelong journey<br>of making memories together.</p>
+      <div class="gold-line" style="width:80px;margin-bottom:1.5rem"></div>
+      <span class="float-heart" style="font-size:2.5rem">❤️</span>
+    </div>
+    <div class="finale-made">Made with all the love in the world for you</div>
+  </div>
 
-    <script src="script.js"></script>
+</div><!-- /stage -->
+
+<script>
+(function(){
+  const TOTAL = 11;
+  let current = 0;
+  let locked = false;
+
+  const stage = document.getElementById('stage');
+  const dotsEl = document.getElementById('dots');
+  const nextBtn = document.getElementById('next-btn');
+  const prevBtn = document.getElementById('prev-btn');
+
+  // ─── BUILD DOTS ───
+  for(let i = 0; i < TOTAL; i++){
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsEl.appendChild(d);
+  }
+  const allDots = dotsEl.querySelectorAll('.dot');
+
+  function updateDots(){
+    allDots.forEach((d,i) => d.classList.toggle('active', i === current));
+  }
+
+  function updateNav(){
+    prevBtn.classList.toggle('hidden', current === 0);
+    nextBtn.classList.toggle('hidden', current === TOTAL - 1);
+    nextBtn.textContent = current === 0 ? 'Begin ❤' : 'Next ❤';
+  }
+
+  // ─── GOTO ───
+  function goTo(idx){
+    if(locked || idx < 0 || idx >= TOTAL) return;
+    locked = true;
+    current = idx;
+    stage.style.transform = `translateX(${-current * 100}vw)`;
+    updateDots();
+    updateNav();
+    setTimeout(() => locked = false, 580);
+  }
+
+  // ─── BUTTONS ───
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+
+  // ─── TAP LANDING ───
+  document.getElementById('scene-0').addEventListener('click', () => {
+    if(current === 0) goTo(1);
+  });
+
+  // ─── SWIPE / DRAG ───
+  let touchStartX = 0, touchStartY = 0, dragging = false;
+  let mouseStartX = 0, isDragging = false;
+
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    dragging = true;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if(!dragging) return;
+    const dx = e.touches[0].clientX - touchStartX;
+    const dy = e.touches[0].clientY - touchStartY;
+    if(Math.abs(dx) > Math.abs(dy)) e.preventDefault();
+  }, { passive: false });
+
+  document.addEventListener('touchend', e => {
+    if(!dragging) return;
+    dragging = false;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if(Math.abs(dx) < Math.abs(dy) || Math.abs(dx) < 40) return;
+    if(dx < 0) goTo(current + 1);
+    else goTo(current - 1);
+  });
+
+  // mouse drag support (desktop preview)
+  document.addEventListener('mousedown', e => {
+    mouseStartX = e.clientX; isDragging = true;
+  });
+  document.addEventListener('mouseup', e => {
+    if(!isDragging) return; isDragging = false;
+    const dx = e.clientX - mouseStartX;
+    if(Math.abs(dx) < 50) return;
+    if(dx < 0) goTo(current + 1);
+    else goTo(current - 1);
+  });
+
+  // keyboard (desktop)
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight') goTo(current + 1);
+    if(e.key === 'ArrowLeft')  goTo(current - 1);
+  });
+
+  updateNav();
+
+  // ─── STARS CANVAS ───
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = [];
+    for(let i = 0; i < 120; i++){
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.2,
+        a: Math.random(),
+        speed: Math.random() * 0.008 + 0.002,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  let raf;
+  function drawStars(t){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const alpha = 0.2 + 0.6 * (0.5 + 0.5 * Math.sin(t * s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,220,${alpha})`;
+      ctx.fill();
+    });
+    raf = requestAnimationFrame(drawStars);
+  }
+  drawStars(0);
+
+  // ─── LANDING PETALS ───
+  const scene0 = document.getElementById('scene-0');
+  const petalChars = ['❤','✿','✦','·','˚'];
+  for(let i = 0; i < 14; i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petalChars[i % petalChars.length];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (6 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    p.style.fontSize = (0.6 + Math.random() * 0.8) + 'rem';
+    p.style.color = i % 3 === 0 ? 'rgba(201,168,76,0.5)' : 'rgba(232,180,184,0.4)';
+    scene0.appendChild(p);
+  }
+
+})();
+</script>
 </body>
-
 </html>

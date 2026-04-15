@@ -2,213 +2,169 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Happy Birthday, Sweetheart ❤️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday ❤️</title>
 
-  <!-- Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Dancing+Script:wght@600&display=swap"
-    rel="stylesheet">
+    <!-- Fonts: Dancing Script for cute headers, Poppins for clean modern text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins..." as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins..." rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="./style.css">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style2.css">
 </head>
 
 <body>
 
-  <canvas id="stars"></canvas>
+    <!-- Canvas for Confetti -->
+    <canvas id="confettiCanvas"></canvas>
 
-  <!-- <div id="dots"></div> -->
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape heart-shape"><i class="fas fa-heart"></i></div>
+        <div class="shape sparkle-shape"><i class="fas fa-sparkles"></i></div>
+        <div class="shape sparkle-shape"><i class="fas fa-sparkles"></i></div>
+        <div class="shape heart-shape"><i class="fas fa-heart"></i></div>
+        <div class="shape heart-shape"><i class="fas fa-heart"></i></div>
+    </div>
 
-  <div id="prev-btn" class="hidden">← Back</div>
-  <div id="next-btn">Next ❤</div>
+    <!-- Background Enhancement GIFs -->
+    <div class="background-gifs">
+        <img src="./GIF/frame_22_delay-0.1s.jpg" alt="Cute Bear 1" class="bg-gif gif-1">
+        <img src="./GIF/frame_54_delay-0.1s.jpg" alt="Cute Bear 2" class="bg-gif gif-2">
+        <img src="./GIF/frame_59_delay-0.1s.jpg" alt="Cute Bear 3" class="bg-gif gif-3">
+        <img src="./GIF/frame_59_delay-0.1s.jpg" alt="Cute Bear 4" class="bg-gif gif-4">
+    </div>
 
-  <div id="stage">
+    <!-- Background Music & Toggle -->
+    <audio id="bgMusic" loop>
+        <source src="./Music/Blue-Yung-Kai.mp3" type="audio/mpeg">
+    </audio>
+    <button id="musicToggle" class="music-toggle glass-panel" title="Play/Pause Music">
+        <i class="fas fa-music"></i>
+    </button>
 
-    <!-- 0 · LANDING -->
-    <div class="scene" id="scene-0">
-      <div class="landing-bg"></div>
-
-      <!-- petals injected by JS -->
-
-      <div class="landing-center">
-        <div class="landing-date">A Very Special Day</div>
-        <div class="gold-line"></div>
-        <div class="landing-title">Happy Birthday<br>Sweetheart</div>
-        <div class="landing-sub">A little story, made just for you</div>
-        <div class="tap-hint">
-          <div class="tap-ring">❤</div>
-          Tap anywhere to begin
+    <!-- HERO SECTION -->
+    <header class="hero" id="home">
+        <div class="hero-content">
+            <div class="bear-container floating-bear">
+                <img src="./Images/img7.jpg" width="300" height="300" fetchpriority="high" />
+            </div>
+            <h1 class="fade-in-up delay-1">Happy Birthday, Nano ❤️</h1>
+            <p class="fade-in-up delay-2 typing-effect">Every moment with you is magic...</p>
+            <button id="startBtn" class="cta-button fade-in-up delay-3 glass-panel">
+                Start the Celebration 🎉
+            </button>
         </div>
-      </div>
+        <div class="scroll-indicator fade-in-up delay-4">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
 
-      <div class="swipe-hint">or swipe left to start</div>
-    </div>
+    <!-- GALLERY SECTION -->
+    <section class="gallery" id="gallery">
+        <div class="container reveal">
+            <h2 class="section-title">A Million Beautiful Memories ✨</h2>
+            <div class="gallery-grid">
+                <!-- Image Cards -->
 
-    <!-- 1 · HERO -->
-    <div class="scene" id="scene-1">
-      <span class="scene-num">01 / 10</span>
-      <div class="hero-img-wrap">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/img8.jpg" alt="You"
-          onerror="this.style.background='linear-gradient(135deg,#2a1040,#1a0828)';this.style.display='block'">
-      </div>
-      <h1 class="hero-name">Happy Birthday,<br>Sweetheart ❤️</h1>
-      <p class="hero-tagline">Every moment with you is magic…</p>
-      <div class="gold-line" style="margin-bottom:1.2rem"></div>
-      <div class="bear-row">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/GIF/frame_22_delay-0.1s.jpg" alt="">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/GIF/frame_54_delay-0.1s.jpg" alt="">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/GIF/frame_59_delay-0.1s.jpg" alt="">
-      </div>
-    </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img1.jpg" alt="Memory 1">
+                    <div class="card-overlay"><span>That first trip 💕</span></div>
+                </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img2.jpg" alt="Memory 2">
+                    <div class="card-overlay"><span>First sunrise together 🌅</span></div>
+                </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img3.jpg" alt="Memory 3">
+                    <div class="card-overlay"><span>Rainy Day ☕</span></div>
+                </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img4.jpg" alt="Memory 4">
+                    <div class="card-overlay"><span>Watching you in Saree 💕</span></div>
+                </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img5.jpg" alt="Memory 5">
+                    <div class="card-overlay"><span>Memorable sunset 🌃</span></div>
+                </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img6.jpg" alt="Memory 6">
+                    <div class="card-overlay"><span>Just a random trip 🎈</span></div>
+                </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img7.jpg" alt="Memory 6">
+                    <div class="card-overlay"><span>Twinning together 🤝</span></div>
+                </div>
+                <div class="gallery-card glass-panel">
+                    <img src="./Images/img8.jpg" alt="Memory 6">
+                    <div class="card-overlay"><span>Memorable Day 💕</span></div>
+                </div>
+            </div>
+        </div>
+        </div>
 
-    <!-- 2 · MEMORY 1 -->
-    <div class="scene memory-scene" id="scene-2">
-      <span class="mem-counter">Memory 01</span>
-      <span class="scene-num">02 / 10</span>
-      <div class="mem-tag">A Million Beautiful Memories</div>
-      <div class="mem-photo">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg"
-          alt="That first trip" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
-      </div>
-      <span class="mem-emoji">🌅</span>
-      <h2 class="mem-caption">That first trip</h2>
-      <p class="mem-sub">where everything felt new & golden</p>
-      <div class="corner-deco">✦</div>
-    </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <button id="toBouquetBtn" class="cta-button glass-panel reveal">
+                See Something Special 🌸 <i class="fas fa-arrow-down" style="margin-left: 8px; font-size: 0.9em;"></i>
+            </button>
+        </div>
+        </div>
+    </section>
 
-    <!-- 3 · MEMORY 2 -->
-    <div class="scene memory-scene" id="scene-3">
-      <span class="mem-counter">Memory 02</span>
-      <span class="scene-num">03 / 10</span>
-      <div class="mem-tag">A Million Beautiful Memories</div>
-      <div class="mem-photo">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg"
-          alt="Your gorgeous smile"
-          onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
-      </div>
-      <span class="mem-emoji">💕</span>
-      <h2 class="mem-caption">Your gorgeous smile</h2>
-      <p class="mem-sub">the one that stopped me in my tracks</p>
-      <div class="corner-deco">✦</div>
-    </div>
+    <!-- BOUQUET SECTION -->
+    <section class="bouquet-section reveal" id="bouquet">
+        <div class="container">
+            <h2 class="section-title">A Digital Bouquet Just For You 💐</h2>
+            <div class="bouquet-container scale-bounce-slow">
+                <img src="./Images/sunflower_lily_bouquet.png" alt="A beautiful digital bouquet of sunflowers and lilies" class="custom-bouquet">
+            </div>
 
-    <!-- 4 · MEMORY 3 -->
-    <div class="scene memory-scene" id="scene-4">
-      <span class="mem-counter">Memory 03</span>
-      <span class="scene-num">04 / 10</span>
-      <div class="mem-tag">A Million Beautiful Memories</div>
-      <div class="mem-photo">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg"
-          alt="Cozy winters" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
-      </div>
-      <span class="mem-emoji">☕</span>
-      <h2 class="mem-caption">Cozy winters</h2>
-      <p class="mem-sub">warm cups, warm hearts</p>
-      <div class="corner-deco">✦</div>
-    </div>
+            <div style="text-align: center; margin-top: 20rem;">
+                <button id="toMessageBtn" class="cta-button glass-panel reveal">
+                    Read My Heart 💌 <i class="fas fa-arrow-down" style="margin-left: 8px; font-size: 0.9em;"></i>
+                </button>
+            </div>
+        </div>
+    </section>
 
-    <!-- 5 · MEMORY 4 -->
-    <div class="scene memory-scene" id="scene-5">
-      <span class="mem-counter">Memory 04</span>
-      <span class="scene-num">05 / 10</span>
-      <div class="mem-tag">A Million Beautiful Memories</div>
-      <div class="mem-photo">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg"
-          alt="Holding hands" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
-      </div>
-      <span class="mem-emoji">🤝</span>
-      <h2 class="mem-caption">Holding hands forever</h2>
-      <p class="mem-sub">the safest place I know</p>
-      <div class="corner-deco">✦</div>
-    </div>
+    <!-- SPECIAL MESSAGE SECTION -->
+    <section class="message-section reveal" id="message">
+        <div class="container">
+            <div class="letter-paper-card">
+                <!-- Magical decorative bear/icons -->
+                <div class="message-decoration scale-bounce">
+                    <i class="fas fa-envelope-open-heart"></i>
+                </div>
+                <h2 class="message-title">To the most annoying person my life...</h2>
+                <div class="message-body">
+                    <p>
+                        From the moment you entered my world, everything just became brighter, softer, and more
+                        beautiful.
+                    </p>
+                    <p>
+                        You are my absolute favorite person, my safest place, and my greatest adventure. I love your
+                        smile, your laugh, and the way you make every single day feel just a little bit like magic.
+                    </p>
+                    <p>
+                        I hope this year brings you as much happiness as you bring to me every single second. Happy
+                        Birthday, darling. Here’s to a lifelong journey of making memories together.
+                    </p>
+                    <p class="signature">Yours forever & always ❤️</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- 6 · MEMORY 5 -->
-    <div class="scene memory-scene" id="scene-6">
-      <span class="mem-counter">Memory 05</span>
-      <span class="scene-num">06 / 10</span>
-      <div class="mem-tag">A Million Beautiful Memories</div>
-      <div class="mem-photo">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg"
-          alt="Late night rides"
-          onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
-      </div>
-      <span class="mem-emoji">🌃</span>
-      <h2 class="mem-caption">Late night rides</h2>
-      <p class="mem-sub">city lights & your laughter</p>
-      <div class="corner-deco">✦</div>
-    </div>
+    <footer class="footer">
+        <p>Made with all the love in the world for you.</p>
+    </footer>
 
-    <!-- 7 · MEMORY 6 -->
-    <div class="scene memory-scene" id="scene-7">
-      <span class="mem-counter">Memory 06</span>
-      <span class="scene-num">07 / 10</span>
-      <div class="mem-tag">A Million Beautiful Memories</div>
-      <div class="mem-photo">
-        <img src="https://ronit1161.github.io/madam-ji-ka-birthday/Images/pexels-teodorapopa-30674062.jpg"
-          alt="Our best adventure"
-          onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0828,#0d0520)'">
-      </div>
-      <span class="mem-emoji">🎈</span>
-      <h2 class="mem-caption">Our best adventure</h2>
-      <p class="mem-sub">every day is one with you</p>
-      <div class="corner-deco">✦</div>
-    </div>
-
-    <!-- 8 · LETTER -->
-    <div class="scene" id="scene-8">
-      <span class="scene-num">08 / 10</span>
-      <div class="letter-inner">
-        <div class="letter-label">💌 &nbsp; From the heart</div>
-        <div class="letter-to">To the most annoying person in my life…</div>
-        <div class="letter-divider"></div>
-        <p class="letter-body">
-          From the moment you entered my world, everything just became brighter, softer, and more beautiful.
-          <br><br>
-          You are my absolute favourite person, my safest place, and my greatest adventure. I love your smile, your
-          laugh, and the way you make every single day feel just a little bit like magic.
-          <br><br>
-          I hope this year brings you as much happiness as you bring to me every single second.
-        </p>
-        <div class="letter-sign">Yours forever &amp; always ❤</div>
-      </div>
-    </div>
-
-    <!-- 9 · BOUQUET -->
-    <div class="scene" id="scene-9">
-      <span class="scene-num">09 / 10</span>
-      <div class="bouquet-wrap">
-        <span class="bouquet-flowers">🌸🌷🌹🌻🌼</span>
-        <div class="gold-line" style="margin-bottom:1.2rem"></div>
-        <h2 class="bouquet-title">A Digital Bouquet<br>Just For You</h2>
-        <p class="bouquet-poem">
-          Every flower for a reason,<br>
-          every petal whispers your name.<br>
-          You make every ordinary moment<br>
-          feel extraordinary.
-        </p>
-        <div class="bouquet-hearts">❤ &nbsp; ❤ &nbsp; ❤</div>
-      </div>
-    </div>
-
-    <!-- 10 · FINALE -->
-    <div class="scene" id="scene-10">
-      <div class="finale-wrap">
-        <span class="confetti-burst">🎉</span>
-        <div class="finale-big shimmer">Happy Birthday!</div>
-        <p class="finale-sub">Here's to a lifelong journey<br>of making memories together.</p>
-        <div class="gold-line" style="width:80px;margin-bottom:1.5rem"></div>
-        <span class="float-heart" style="font-size:2.5rem">❤️</span>
-      </div>
-      <div class="finale-made">Made with all the love in the world for you</div>
-    </div>
-
-  </div><!-- /stage -->
-
-  <!-- JS -->
-  <script src="./script.js"></script>
-
+    <script src="script2.js"></script>
 </body>
 
 </html>

@@ -58,7 +58,7 @@ body {
 /* ========== TYPOGRAPHY ========== */
 h1 {
     font-family: var(--font-heading);
-    font-size: clamp(3rem, 3rem, 3rem);
+    font-size: 2rem;
     color: var(--text-highlight);
     text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.6);
     margin-bottom: 0.5rem;
@@ -73,7 +73,7 @@ h2 {
     text-align: center;
 }
 
-p {
+p{
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 1rem;
@@ -170,12 +170,12 @@ p {
 
 /* Cute Bear Container */
 .bear-container {
-    width: 300px;
+    width: 250px;
     height: 200px;
     margin-bottom: 40px;
     border-radius: 30px;
     overflow: hidden;
-    /* Soft border around the bear */
+    
     border: 5px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0 10px 25px rgba(255, 140, 180, 0.3);
 }
@@ -210,6 +210,49 @@ p {
     40% { transform: translateY(-15px); }
     60% { transform: translateY(-7px); }
 }
+
+
+
+
+
+/* .gallery-card {
+        position: relative;
+        overflow: hidden;
+    } */
+
+    .scratch-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="30" viewBox="0 0 24 30"><circle cx="12" cy="12" r="10" fill="white" opacity="0.6"/></svg>') 12 12, grab;
+        touch-action: none;
+        pointer-events: auto;
+    }
+
+    .scratch-canvas.revealed {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .card-overlay {
+        z-index: 1;
+        pointer-events: none;  /* allows clicks to pass through to canvas */
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 /* ========== GALLERY SECTION ========== */
 .gallery {

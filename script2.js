@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicToggle = document.getElementById('musicToggle');
     let isPlaying = false;
 
-    // Optional: Try autoplaying on first interaction anywhere
     document.body.addEventListener('click', () => {
         if(!isPlaying) {
             bgMusic.play().then(() => {
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true }); 
 
     musicToggle.addEventListener('click', (e) => {
-        e.stopPropagation(); // prevent body click trigger
+        e.stopPropagation();
         if (isPlaying) {
             bgMusic.pause();
         } else {
@@ -75,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-                observer.unobserve(entry.target); // Reveal only once
+                observer.unobserve(entry.target);
             }
         });
     }, revealOptions);
@@ -87,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Continuous Light Confetti
     setupConfetti();
 
-    // 6. Scratch to Reveal Gallery Cards
+    // 6. Scratch to Reveal Gallery Cards (FIXED)
     const galleryCards = document.querySelectorAll('.gallery-card');
     galleryCards.forEach(card => {
         const canvas = document.createElement('canvas');
@@ -99,38 +98,74 @@ document.addEventListener('DOMContentLoaded', () => {
         let isRevealed = false;
         let hasStartedScratching = false;
         
-        // Wait brief moment for layout
-        setTimeout(() => initCanvas(), 200);
-        
+        // ---------- FIX: Robust initialization ----------
         function initCanvas() {
-            if (isRevealed || hasStartedScratching) return;
-            canvas.width = card.offsetWidth;
-            canvas.height = card.offsetHeight;
+            if (isRevealed) return;
+            
+            const rect = card.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            
+            // Set actual canvas size (high DPI)
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            
+            // Reset transform and scale for crisp drawing
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
             
             ctx.globalCompositeOperation = 'source-over';
             
-            // Draw a frosted silver/grey effect
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            // Frosted silver gradient
+            const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
             gradient.addColorStop(0, '#e5e5e5');
             gradient.addColorStop(0.5, '#f5f5f5');
             gradient.addColorStop(1, '#cccccc');
             ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, rect.width, rect.height);
             
-            // Add instructions
+            // Instructions text
             ctx.font = '600 1.2rem Poppins, sans-serif';
             ctx.fillStyle = '#888';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('Scratch Me ✨', canvas.width / 2, canvas.height / 2);
+            ctx.fillText('Scratch Me ✨', rect.width / 2, rect.height / 2);
+            
+            hasStartedScratching = false;
         }
-
-        window.addEventListener('resize', () => {
-             if(!hasStartedScratching) initCanvas();
-        });
         
+        // Wait for card to have dimensions, then draw
+        function safeInit() {
+            if (card.offsetWidth > 0 && card.offsetHeight > 0) {
+                initCanvas();
+            } else {
+                requestAnimationFrame(safeInit);
+            }
+        }
+        
+        // Use ResizeObserver if available, otherwise fallback to window resize
+        if (window.ResizeObserver) {
+            const observer = new ResizeObserver(() => {
+                if (!hasStartedScratching && !isRevealed) {
+                    initCanvas();
+                }
+            });
+            observer.observe(card);
+        } else {
+            window.addEventListener('resize', () => {
+                if (!hasStartedScratching && !isRevealed) initCanvas();
+            });
+        }
+        
+        safeInit();
+        
+        // ---------- FIX: Correct coordinate mapping for DPR ----------
         function getPos(e) {
             const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;   // = devicePixelRatio
+            const scaleY = canvas.height / rect.height;
+            
             let clientX = e.clientX;
             let clientY = e.clientY;
             
@@ -140,8 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
             };
         }
         
@@ -151,8 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
             hasStartedScratching = true;
             
             ctx.globalCompositeOperation = 'destination-out';
-            const pos = getPos(e);
+            ctx.fillStyle = 'rgba(0,0,0,1)';  // Alpha channel is all that matters
             
+            const pos = getPos(e);
             ctx.beginPath();
             ctx.arc(pos.x, pos.y, 45, 0, Math.PI * 2); 
             ctx.fill();
@@ -160,9 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         function checkReveal() {
             if (isRevealed || !hasStartedScratching) return;
+            
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             let transparent = 0;
-            // Check every 16th pixel for performance (i += 64 because 4 channels * 16)
+            
+            // Check every 16th pixel (4 channels * 16 = 64)
             for (let i = 3; i < imageData.data.length; i += 64) {
                 if (imageData.data[i] < 128) transparent++;
             }
@@ -174,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
+        // Event listeners (unchanged)
         canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
         canvas.addEventListener('mousemove', scratch);
         window.addEventListener('mouseup', () => { isDrawing = false; checkReveal(); });
@@ -184,12 +223,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Confetti System
+// Confetti System (unchanged, kept for completeness)
 function setupConfetti() {
     const canvas = document.getElementById('confettiCanvas');
     const ctx = canvas.getContext('2d');
     
-    // Resize canvas to full window
     let width = window.innerWidth;
     let height = window.innerHeight;
     canvas.width = width;
@@ -202,23 +240,21 @@ function setupConfetti() {
         canvas.height = height;
     });
 
-    // Confetti particles
-    const confettiCount = 50; // light/subtle amount
+    const confettiCount = 50;
     const confettiColors = ['#ffccd5', '#fad0c4', '#fbc2eb', '#ffffff', '#ffd1ff'];
     const particles = [];
 
     class Particle {
         constructor() {
             this.x = Math.random() * width;
-            this.y = Math.random() * height - height; // Start above screen
+            this.y = Math.random() * height - height;
             this.size = Math.random() * 5 + 3;
             this.color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-            this.speedY = Math.random() * 1.5 + 0.5; // Slow fall
-            this.speedX = Math.random() * 1 - 0.5; // Slight horizontal drift
-            // Create some shapes as circles, some as tiny hearts/rectangles
+            this.speedY = Math.random() * 1.5 + 0.5;
+            this.speedX = Math.random() * 1 - 0.5;
             this.shape = Math.random() > 0.5 ? 'circle' : 'square';
             this.angle = Math.random() * 360;
-            this.spinText = Math.random() < 0.2; // 20% spin factor
+            this.spinText = Math.random() < 0.2;
         }
 
         update() {
@@ -226,7 +262,6 @@ function setupConfetti() {
             this.x += this.speedX;
             if(this.spinText) this.angle += 2;
 
-            // Reset particle when it drops below screen
             if (this.y > height) {
                 this.y = -10;
                 this.x = Math.random() * width;
@@ -238,7 +273,7 @@ function setupConfetti() {
             ctx.translate(this.x, this.y);
             ctx.rotate(this.angle * Math.PI / 180);
             ctx.fillStyle = this.color;
-            ctx.globalAlpha = 0.7; // soft transparency
+            ctx.globalAlpha = 0.7;
 
             if (this.shape === 'circle') {
                 ctx.beginPath();
@@ -251,12 +286,10 @@ function setupConfetti() {
         }
     }
 
-    // Initialize particles
     for (let i = 0; i < confettiCount; i++) {
         particles.push(new Particle());
     }
 
-    // Animation Loop
     function animate() {
         ctx.clearRect(0, 0, width, height);
         particles.forEach(p => {
